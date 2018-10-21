@@ -53,6 +53,9 @@ def getStates():
         latLng = result[0].split(' ')
         print (latLng)
 
+
+
+
         
         return render_template('base.html', form=form, lng=latLng[0], lat=latLng[1], geomJson = newGeo)
 
@@ -61,8 +64,6 @@ def getStates():
 
 @app.route('/test', methods=['GET'])
 def test():
-    a = 5
-    b = 10
-    print (a + b)
-    print (jsonify(a))
-    return jsonify(result=a)
+    statement = "SELECT name, ST_AsGeoJson(states.geom) as geom FROM states WHERE states.name = '{}'".format('Maryland')
+    state2 = session.execute(statement).first()
+    return jsonify(result=state2.geom, name=state2.name)

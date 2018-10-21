@@ -10,6 +10,7 @@
     var polyShape = document.getElementById('geomCoord').textContent
    
     console.log(polyShape2.length)
+    console.log(polyShape)
     if (lat != undefined) {
         var mymap = L.map('mapId2').setView([lat, lng], 6)
     } else {
@@ -55,7 +56,18 @@
         request.onload = function() {
             if (request.status >= 200 && request.status < 400) {
                 var data = JSON.parse(request.responseText)
-                console.log(data)
+                console.log(data['result'])
+                console.log(JSON.parse(data['result']))
+                var polyg2 = JSON.parse(data['result'])
+                var geojsonFeature = {
+                    'type': 'Feature',
+                    "properties": {
+                        "name": "A state",
+                        "popupContent": "What the user chose"
+                    },
+                    'geometry': polyg2
+                }
+                L.geoJSON(geojsonFeature).addTo(mymap)
             } else {
             // We reached target server, but it returend nothing!
                 console.log(request.status)
