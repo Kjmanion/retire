@@ -1,0 +1,19 @@
+*,*:before, *:after {
+    box-sizing:border-box;
+}
+
+header > h1 {
+    text-align: center;
+}
+
+#mapId {
+    height: 10px;
+}
+#mapId2 {
+    height: 400px;
+    width: 100%;
+}
+
+#mapId2>p {
+    margin-top: 500px;
+}
