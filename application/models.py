@@ -18,7 +18,9 @@ class States(Base):
     stpostal = Column(String)
     version = Column(String)
     dotregion = Column(Integer)
+    otherInt = Column(Integer)
     geom = Column(Geometry(geometry_type='polygon', srid=4269))
+    
 
 class Tornadoes(Base):
     __tablename__ = 'tornadoes'

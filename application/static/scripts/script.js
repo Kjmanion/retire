@@ -21,7 +21,8 @@
 
     document.getElementById('testButt2').addEventListener('click', function() {
         var item = document.getElementById('selections')
-        var state = item.options[item.value].text
+        var state = item.options[item.value-1].text
+        console.log(state)
         var request = new XMLHttpRequest()
         request.open('POST', '/test', true)
         var data = {'data':state}
