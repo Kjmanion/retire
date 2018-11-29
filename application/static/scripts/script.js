@@ -12,6 +12,20 @@
     } else {
         var mymap = L.map('mapId2').setView([38, -78], 6)
     }
+
+    function populateSelects(idElement){
+        console.log(idElement)
+        var select = document.getElementById(idElement)
+        console.log(select)
+        for (i = 1950; i < 2018; i++) {
+            var el = document.createElement('option')
+            el.textContent = i
+            el.value = i
+            select.appendChild(el)
+        }
+    }
+    populateSelects("beforeYear")
+    populateSelects("afterYear")
     
     L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         maxZoom: 19,
@@ -19,13 +33,17 @@
     }).addTo(mymap);
 
 
-    document.getElementById('testButt2').addEventListener('click', function() {
+    document.getElementById('testButt').addEventListener('click', function() {
+        if (parseInt(document.getElementById('afterYear').value) > parseInt(document.getElementById('beforeYear').value)) {
+            return alert ('Please check to make sure years are in the right order')
+        }
+
         var item = document.getElementById('selections')
         var state = item.options[item.value-1].text
         console.log(state)
         var request = new XMLHttpRequest()
         request.open('POST', '/test', true)
-        var data = {'data':state}
+        var data = {'state':state, 'afterYear':document.getElementById('afterYear').value, 'beforeYear': document.getElementById('beforeYear').value}
         var myJSON = JSON.stringify(data)
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
         request.send(myJSON)
