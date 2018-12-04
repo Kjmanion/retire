@@ -2,11 +2,11 @@
 
     var lat = document.getElementById('mapId').dataset.lat
     var lng = document.getElementById('mapId').dataset.lng
-    var polyShape2 = document.getElementById('mapId').dataset.geo
-    var polyShape = document.getElementById('geomCoord').textContent
+    // var polyShape2 = document.getElementById('mapId').dataset.geo
+    // var polyShape = document.getElementById('geomCoord').textContent
    
-    console.log(polyShape2.length)
-    console.log(polyShape)
+    // console.log(polyShape2.length)
+    // console.log(polyShape)
     if (lat != undefined) {
         var mymap = L.map('mapId2').setView([38, -78], 6)
     } else {
@@ -32,6 +32,11 @@
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
     }).addTo(mymap);
 
+    function onEachFeatures(feature, layer) {
+        if (feature.properties && feature.properties.popupContent){
+            layer.bindPopup('HELLOL')
+        }
+    }
 
     document.getElementById('testButt').addEventListener('click', function() {
         if (parseInt(document.getElementById('afterYear').value) > parseInt(document.getElementById('beforeYear').value)) {
@@ -52,11 +57,21 @@
             if (request.status >= 200 && request.status < 400) {
                 var data = JSON.parse(request.responseText)
                 var polyg = JSON.parse(data['result'])
-                for(i=0;i<data['result2'].length;i++){
-                    var line = JSON.parse(data['result2'][i]['geom'])
-                    L.geoJSON(line).addTo(mymap)
-                }
-                L.geoJSON(polyg).addTo(mymap)
+                var lines = data['result2'][0]['row_to_json']
+                console.log(lines)
+                var lineStyle = {"color": "blue", "weight": 5,"opacity": 0.9}
+                L.geoJSON(lines, {
+                    style: lineStyle,
+                    onEachFeature: function (feature, layer) {
+                        if (feature.properties){
+                            layer.bindPopup(`<h3>Date ${feature.properties.date}</h3></br><h4>F Scale : ${feature.properties.mag}</h4>`)
+                        }
+                    }
+                }).addTo(mymap)
+                var stateStyle = {"color": "black","weight": 6,"opacity": 0.5,"fill": false}
+                L.geoJSON(polyg, {
+                    style: stateStyle
+                }).addTo(mymap)
                 var coorss = JSON.parse(data['center'])
                 console.log(coorss['coordinates'])
                 mymap.panTo([coorss['coordinates'][1], coorss['coordinates'][0]], 6)

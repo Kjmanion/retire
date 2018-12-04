@@ -3,6 +3,7 @@ from flask import render_template, jsonify, redirect, url_for, request, jsonify
 from .forms import *
 from .models import *
 import re
+import psycopg2
 
 
 
@@ -21,8 +22,16 @@ def test():
     req = request.get_json()
     print (req)
     statement = "SELECT name, ST_AsGeoJson(states2.geom) as geom, ST_AsGeoJSON(ST_AsText(ST_Centroid(states2.geom))) as centroid FROM states2 WHERE states2.name = '{}'".format(req['state'])
-    tornadoStatement = "SELECT ST_AsGeoJson(tornadoes.geom) as geom FROM tornadoes INNER JOIN states2 ON ST_Intersects(states2.geom, tornadoes.geom) WHERE states2.name = '{}' AND tornadoes.yr > {} AND tornadoes.yr < {}".format(req['state'], req['afterYear'], req['beforeYear'])
+    tornadoStatement = """SELECT row_to_json(fc)
+        FROM ( SELECT 'FeatureCollection' AS type, array_to_json(array_agg(f)) As features
+        FROM (SELECT 'Feature'  as type
+        , ST_AsGeoJSON(tor.geom)::json as geometry
+        , row_to_json((SELECT t FROM (SELECT mag, date) AS t
+            )) AS properties
+            FROM tornadoes as tor INNER JOIN states2 
+            ON ST_Intersects(states2.geom, tor.geom)
+            WHERE states2.name = '{}' AND tor.yr > {} AND tor.yr < {}
+        ) AS f ) AS fc""".format(req['state'], req['afterYear'], req['beforeYear'])
     state2 = session.execute(statement).first()
     tornadoes = session.execute(tornadoStatement).fetchall()
-    #return jsonify(result=state2.geom, name=state2.name, center=state2.centroid)
     return jsonify(result2=[dict(row) for row in tornadoes], result=state2.geom, name=state2.name, center=state2.centroid)
