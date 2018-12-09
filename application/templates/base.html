@@ -32,16 +32,19 @@
         </p>    
     </div>
     <form action="" method='post'>
-       <h3>{{form.description}}</h3>
-        {{form.selections(class_='form-control',placeholder="")}} 
-		<br>
-        <label for="afterYear">After:</label>
-        <select name="afterYear" id="afterYear"></select>
-        <label for="beforeYear">Before:</label>
-        <select name="afterYear" id="beforeYear"></select>
-    </form>
+        <h3>{{form.description}}</h3>
+         {{form.selections(class_='form-control',placeholder="")}} 
+         <br>
+         <label for="afterYear">From:</label>
+         <select name="afterYear" id="afterYear"></select>
+         <label for="beforeYear">To:</label>
+         <select name="afterYear" id="beforeYear"></select>
+         <input type="button" value="test" id='testButt'>
+     </form>
+     <input type="button" value="Clear Map" id='clearing'>
+     
 
-        <input type="submit" value="test" id='testButt'>
+        
     
     
 

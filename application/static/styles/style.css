@@ -1,19 +1,33 @@
 *,*:before, *:after {
     box-sizing:border-box;
 }
+html {
+    background: #EBD3C5;
+}
 
 header > h1 {
     text-align: center;
 }
 
 #mapId {
-    height: 10px;
+    height: 0px;
 }
 #mapId2 {
+    margin: 0 auto;
     height: 400px;
-    width: 100%;
+    width: 90%;
 }
 
 #mapId2>p {
     margin-top: 500px;
+}
+
+form {
+    display:block;
+    width:90%;
+    margin: 0 auto;
+}
+
+#clearing {
+    margin-left: 10%;
 }

@@ -2,11 +2,7 @@
 
     var lat = document.getElementById('mapId').dataset.lat
     var lng = document.getElementById('mapId').dataset.lng
-    // var polyShape2 = document.getElementById('mapId').dataset.geo
-    // var polyShape = document.getElementById('geomCoord').textContent
-   
-    // console.log(polyShape2.length)
-    // console.log(polyShape)
+    
     if (lat != undefined) {
         var mymap = L.map('mapId2').setView([38, -78], 6)
     } else {
@@ -42,6 +38,8 @@
         if (parseInt(document.getElementById('afterYear').value) > parseInt(document.getElementById('beforeYear').value)) {
             return alert ('Please check to make sure years are in the right order')
         }
+        
+
 
         var item = document.getElementById('selections')
         var state = item.options[item.value-1].text
@@ -81,6 +79,18 @@
                 console.log('we reached server, but something else failed')   
             }
         }
+    })
+
+    document.getElementById('clearing').addEventListener('click', function(){
+        mymap.eachLayer(function (layer){
+            console.log(layer)
+            if (layer.feature && layer.feature.type != undefined){
+                mymap.removeLayer(layer)
+            }
+            // if (layer.feature.Type == 'Feature'){
+            //     mymap.removeLayer(layer)
+            // }
+        })
     })
 
 })();
