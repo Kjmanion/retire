@@ -3,10 +3,34 @@
 }
 html {
     background: #EBD3C5;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+body {
+    width: 80%;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+header {
+    display: flex;
+    justify-content:space-between
 }
 
 header > h1 {
     text-align: center;
+}
+
+header > ul {
+    display: block;
+    padding-left: 0;
+}
+
+li {
+    list-style-type: none;
+}
+li>a {
+    text-decoration: none;
 }
 
 #mapId {
@@ -15,7 +39,6 @@ header > h1 {
 #mapId2 {
     margin: 0 auto;
     height: 400px;
-    width: 90%;
 }
 
 #mapId2>p {
@@ -24,10 +47,9 @@ header > h1 {
 
 form {
     display:block;
-    width:90%;
     margin: 0 auto;
 }
 
 #clearing {
-    margin-left: 10%;
+    margin-top: 10px;
 }

@@ -28,19 +28,10 @@
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
     }).addTo(mymap);
 
-    function onEachFeatures(feature, layer) {
-        if (feature.properties && feature.properties.popupContent){
-            layer.bindPopup('HELLOL')
-        }
-    }
-
     document.getElementById('testButt').addEventListener('click', function() {
         if (parseInt(document.getElementById('afterYear').value) > parseInt(document.getElementById('beforeYear').value)) {
             return alert ('Please check to make sure years are in the right order')
         }
-        
-
-
         var item = document.getElementById('selections')
         var state = item.options[item.value-1].text
         console.log(state)
@@ -62,7 +53,7 @@
                     style: lineStyle,
                     onEachFeature: function (feature, layer) {
                         if (feature.properties){
-                            layer.bindPopup(`<h3>Date ${feature.properties.date}</h3></br><h4>F Scale : ${feature.properties.mag}</h4>`)
+                            layer.bindPopup(`<h3>Date:${feature.properties.date}</h3></br><h4>Fujita Scale: ${feature.properties.mag}</h4>`)
                         }
                     }
                 }).addTo(mymap)

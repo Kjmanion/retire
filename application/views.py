@@ -34,4 +34,9 @@ def test():
         ) AS f ) AS fc""".format(req['state'], req['afterYear'], req['beforeYear'])
     state2 = session.execute(statement).first()
     tornadoes = session.execute(tornadoStatement).fetchall()
+    print (tornadoes)
     return jsonify(result2=[dict(row) for row in tornadoes], result=state2.geom, name=state2.name, center=state2.centroid)
+
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template('about.html', title='About this page')

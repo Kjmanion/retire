@@ -7,9 +7,8 @@
     {% if title %}
     <title>{{ title }}</title>
     {% else %}
-    <title>NOAA Tornado Data Viewer</title>
+    <title>About</title>
     {% endif %}
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
     integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
     crossorigin=""/>
@@ -21,37 +20,9 @@
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
 </head>
 <body>
-    <header>
-    <ul>
-        <li><a href="/about">About</a></li>
-    </ul>
-    <h1>Tornado Data Viewer</h1>
-    
-    </header>
-
-    <div id="mapId" data-lat ={{lat|safe}} data-lng={{lng|safe}} data-geo={{geomJson|safe}} data-root={{request.script_root|tojson|safe}}>
-        
-    </div>
-    <div id="mapId2">
-        <p id='geomCoord'>
-            {{geomJson}}
-        </p>    
-    </div>
-    <form action="" method='post'>
-        <h3>{{form.description}}</h3>
-         {{form.selections(class_='form-control',placeholder="")}} 
-         <br>
-         <label for="afterYear">From:</label>
-         <select name="afterYear" id="afterYear"></select>
-         <label for="beforeYear">To:</label>
-         <select name="afterYear" id="beforeYear"></select>
-         <input type="button" value="Submit" id='testButt'>
-     </form>
-     <input type="button" value="Clear Map" id='clearing'>
-     
-
-    <script src="{{ url_for('static', filename='scripts/script.js') }}">
-    </script>
-
+    <h1>About this project</h1>
+    <p>This is a query viewer of Tornado paths from NOAA that you can find on this <a href="https://www.spc.noaa.gov/gis/svrgis/">page</a>
+    It also has served as my first (of hopefully many) Flask-PostGIS project.</p>
+    <br>
+    <a href="\">Back To Application</a>
 </body>
-</html>
