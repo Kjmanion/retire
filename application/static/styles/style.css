@@ -50,6 +50,10 @@ form {
     margin: 0 auto;
 }
 
+body >p {
+    color: red;
+}
+
 #clearing {
     margin-top: 10px;
 }

@@ -29,6 +29,9 @@
     }).addTo(mymap);
 
     document.getElementById('testButt').addEventListener('click', function() {
+        if (document.getElementsByTagName('body')[0].contains(document.getElementsByTagName('p')[1])) {
+            document.getElementsByTagName('body')[0].removeChild(document.getElementsByTagName('p')[1])
+        } 
         if (parseInt(document.getElementById('afterYear').value) > parseInt(document.getElementById('beforeYear').value)) {
             return alert ('Please check to make sure years are in the right order')
         }
@@ -48,6 +51,9 @@
                 var polyg = JSON.parse(data['result'])
                 var lines = data['result2'][0]['row_to_json']
                 console.log(lines)
+                if (lines.features == null) {
+                    return errorMsg()
+                }
                 var lineStyle = {"color": "blue", "weight": 5,"opacity": 0.9}
                 L.geoJSON(lines, {
                     style: lineStyle,
@@ -83,5 +89,13 @@
             // }
         })
     })
+
+    function errorMsg() {
+        var node = document.createElement("p")
+        var textnode = document.createTextNode("No features, please select a new query")
+        node.appendChild(textnode)
+        document.getElementsByTagName('body')[0].appendChild(node)
+    }
+
 
 })();
