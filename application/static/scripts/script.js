@@ -1,7 +1,7 @@
 (function(){
 
-    var lat = document.getElementById('mapId').dataset.lat
-    var lng = document.getElementById('mapId').dataset.lng
+    var lat = document.getElementById('mapId2').dataset.lat
+    var lng = document.getElementById('mapId2').dataset.lng
     
     if (lat != undefined) {
         var mymap = L.map('mapId2').setView([38, -78], 6)
@@ -28,28 +28,62 @@
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>'
     }).addTo(mymap);
 
-    document.getElementById('testButt').addEventListener('click', function() {
+    document.getElementById('sendStateData').addEventListener('click', function(){
+        getData('defineYears')
+    })
+    document.getElementById('sendCityData').addEventListener('click', function(){
+        getData('cityData')
+    })
+
+    document.getElementById('clearing').addEventListener('click', function(){
+        mymap.eachLayer(function (layer){
+            console.log(layer)
+            if (layer.feature && layer.feature.type != undefined){
+                mymap.removeLayer(layer)
+            }
+            // if (layer.feature.Type == 'Feature'){
+            //     mymap.removeLayer(layer)
+            // }
+        })
+    })
+
+
+    function errorMsg() {
+        var node = document.createElement("p")
+        var textnode = document.createTextNode("No features, please select a new query")
+        node.appendChild(textnode)
+        document.getElementsByTagName('body')[0].appendChild(node)
+    }
+
+    function getData(queryType) {
         if (document.getElementsByTagName('body')[0].contains(document.getElementsByTagName('p')[1])) {
             document.getElementsByTagName('body')[0].removeChild(document.getElementsByTagName('p')[1])
         } 
         if (parseInt(document.getElementById('afterYear').value) > parseInt(document.getElementById('beforeYear').value)) {
             return alert ('Please check to make sure years are in the right order')
         }
-        var item = document.getElementById('selections')
-        var state = item.options[item.value-1].text
-        console.log(state)
-        var request = new XMLHttpRequest()
-        request.open('POST', '/test', true)
-        var data = {'state':state, 'afterYear':document.getElementById('afterYear').value, 'beforeYear': document.getElementById('beforeYear').value}
+        if (queryType == 'defineYears') {
+            var item = document.getElementById('selections')
+            var state = item.options[item.value-1].text
+            var request = new XMLHttpRequest()
+            request.open('POST', '/getStateData', true)
+            var data = {'state':state, 'afterYear':document.getElementById('afterYear').value, 'beforeYear': document.getElementById('beforeYear').value}
+        }
+        else {
+            var item = document.getElementById('selections2')
+            var state = item.options[item.value-1].text
+            var request = new XMLHttpRequest()
+            request.open('POST', '/getCityData', true)
+            var data = {'state':item.options[item.value-1].text, 'cityChoice':document.getElementById('cityChoice').value}
+        }
         var myJSON = JSON.stringify(data)
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
         request.send(myJSON)
         request.onload = function() {
-            
             if (request.status >= 200 && request.status < 400) {
                 var data = JSON.parse(request.responseText)
-                var polyg = JSON.parse(data['result'])
-                var lines = data['result2'][0]['row_to_json']
+                var polyg = JSON.parse(data['areaOutline'])
+                var lines = data['tornadoes'][0]['row_to_json']
                 console.log(lines)
                 if (lines.features == null) {
                     return errorMsg()
@@ -70,32 +104,14 @@
                 var coorss = JSON.parse(data['center'])
                 console.log(coorss['coordinates'])
                 mymap.panTo([coorss['coordinates'][1], coorss['coordinates'][0]], 6)
-            } else {
-            // We reached target server, but it returend nothing!
-                console.log(request.status)
-                console.log('we reached server, but something else failed')   
+                } else {
+                // We reached target server, but it returend nothing!
+                    console.log(request.status)
+                    console.log('we reached server, but something else failed')   
+                }
             }
         }
-    })
-
-    document.getElementById('clearing').addEventListener('click', function(){
-        mymap.eachLayer(function (layer){
-            console.log(layer)
-            if (layer.feature && layer.feature.type != undefined){
-                mymap.removeLayer(layer)
-            }
-            // if (layer.feature.Type == 'Feature'){
-            //     mymap.removeLayer(layer)
-            // }
-        })
-    })
-
-    function errorMsg() {
-        var node = document.createElement("p")
-        var textnode = document.createTextNode("No features, please select a new query")
-        node.appendChild(textnode)
-        document.getElementsByTagName('body')[0].appendChild(node)
-    }
+    
 
 
 })();

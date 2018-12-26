@@ -26,6 +26,11 @@ header > ul {
     padding-left: 0;
 }
 
+h3, h4 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 li {
     list-style-type: none;
 }
@@ -33,9 +38,6 @@ li>a {
     text-decoration: none;
 }
 
-#mapId {
-    height: 0px;
-}
 #mapId2 {
     margin: 0 auto;
     height: 400px;

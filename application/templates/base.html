@@ -22,31 +22,37 @@
 </head>
 <body>
     <header>
-    <ul>
-        <li><a href="/about">About</a></li>
-    </ul>
-    <h1>Tornado Data Viewer</h1>
-    
+        <h1>Tornado Data Viewer</h1>    
+        <ul>
+            <li><a href="/about">About</a></li>
+        </ul>
     </header>
-
-    <div id="mapId" data-lat ={{lat|safe}} data-lng={{lng|safe}} data-geo={{geomJson|safe}} data-root={{request.script_root|tojson|safe}}>
-        
-    </div>
-    <div id="mapId2">
+    <div id="mapId2"  data-lat ={{lat|safe}} data-lng={{lng|safe}} data-geo={{geomJson|safe}} data-root={{request.script_root|tojson|safe}}>
         <p id='geomCoord'>
             {{geomJson}}
         </p>    
     </div>
-    <form action="" method='post'>
-        <h3>{{form.description}}</h3>
-         {{form.selections(class_='form-control',placeholder="")}} 
-         <br>
-         <label for="afterYear">From:</label>
-         <select name="afterYear" id="afterYear"></select>
-         <label for="beforeYear">To:</label>
-         <select name="afterYear" id="beforeYear"></select>
-         <input type="button" value="Submit" id='testButt'>
-     </form>
+    <div>
+        <form action="" method='post'>
+            <h3>{{form.description}}</h3>
+             {{form.selections(class_='form-control',placeholder="")}} 
+             <br>
+             <label for="afterYear">From:</label>
+             <select name="afterYear" id="afterYear"></select>
+             <label for="beforeYear">To:</label>
+             <select name="afterYear" id="beforeYear"></select>
+             <input type="button" value="Submit" id='sendStateData'>
+         </form>
+         <form action="" method='post'>
+             <h3>{{form2.description}}</h3>
+             <h4>This query will return a record of tornadoes from 1950-2017 that come within 10 miles</h4>
+             <input type="text" id='cityChoice'>
+             {{form2.selections2(class_='form-control',placeholder="")}}
+             <input type="button" value="Submit" id='sendCityData'>
+             <br>
+         </form>
+    </div>
+    
      <input type="button" value="Clear Map" id='clearing'>
      
 
