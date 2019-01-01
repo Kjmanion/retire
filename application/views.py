@@ -49,7 +49,8 @@ def getCityData():
     # city = session.execute("SELECT * FROM cities WHERE city = '{}'".format('Washington'))
     # print (query)
     city = session.query(Cities, States.stpostal).join(States, States.stpostal==Cities.state_abb).filter(Cities.city==req['cityChoice'], States.name==req['state']).first()
-    
+    if city == None:
+        return jsonify(tornadoes=city, areaOutline=None, center=None)
     print (city[0].latitude, city[0].longitude)
     statement = """SELECT row_to_json(fc)
         FROM (SELECT 'FeatureCollection' AS type, array_to_json(array_agg(f)) AS features

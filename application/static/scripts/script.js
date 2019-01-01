@@ -82,6 +82,10 @@
         request.onload = function() {
             if (request.status >= 200 && request.status < 400) {
                 var data = JSON.parse(request.responseText)
+                console.log(data)
+                if (data['tornadoes'] == null) {
+                    return errorMsg()
+                }
                 var polyg = JSON.parse(data['areaOutline'])
                 var lines = data['tornadoes'][0]['row_to_json']
                 console.log(lines)
