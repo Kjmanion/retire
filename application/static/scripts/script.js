@@ -19,6 +19,9 @@
             el.value = i
             select.appendChild(el)
         }
+        if (idElement == 'beforeYear'){
+            select.selectedIndex = 67
+        }
     }
     populateSelects("beforeYear")
     populateSelects("afterYear")
@@ -92,16 +95,20 @@
                 if (lines.features == null) {
                     return errorMsg()
                 }
+                var weights = [0, 0.7, 0.8, 1.1, 1.2, 1,4]
                 var lineStyle = {"color": "blue", "weight": 5,"opacity": 0.9}
                 L.geoJSON(lines, {
-                    style: lineStyle,
+                    // style: lineStyle,
+                    style: function(feature) {
+                        return {"color": "red", "weight": feature.properties.mag * weights[feature.properties.mag], "opacity": 0.6}
+                    },
                     onEachFeature: function (feature, layer) {
                         if (feature.properties){
                             layer.bindPopup(`<h3>Date:${feature.properties.date}</h3></br><h4>Fujita Scale: ${feature.properties.mag}</h4>`)
                         }
                     }
                 }).addTo(mymap)
-                var stateStyle = {"color": "black","weight": 6,"opacity": 0.5,"fill": false}
+                var stateStyle = {"color": "black","weight": 4,"opacity": 0.5,"fill": false}
                 L.geoJSON(polyg, {
                     style: stateStyle
                 }).addTo(mymap)
