@@ -9,13 +9,14 @@ from .models import *
 def home():
     form = StateForm(request.form)
     form2 = StateForm(request.form)
-    statement = 'SELECT gid2, name FROM states2 ORDER BY name'
-    states = session.execute(statement)
-    states2 = session.execute(statement)
-    for stat in states2:
-        print (stat.name, stat.gid2)
+    statement = 'SELECT gid2, name, stusps FROM states2 ORDER BY name'
+    states = session.execute(statement).fetchall()
+    # Understand why this doesn't work
+    # states2 = session.execute(statement).fetchall()
+    # for stat in states2:
+    #     print (stat.name, stat.gid2, stat.stusps)
     form.selections.choices = [(state.gid2, state.name) for state in states]
-    form2.selections2.choices = [(state.gid2, state.name) for state in states2]
+    form2.selections2.choices = [(state.gid2, state.stusps) for state in states]
     form.description = 'Select a state'
     form2.description = 'Or enter a city and state'
     return render_template('base.html', form=form, form2=form2)
@@ -50,10 +51,11 @@ def getCityData():
     # query = session.query(Cities, States).filter(Cities.state_abb==States.stpostal).filter(Cities.city.like(req['cityChoice']))
     # city = session.execute("SELECT * FROM cities WHERE city = '{}'".format('Washington'))
     # print (query)
-    city = session.query(Cities, States.stpostal).join(States, States.stpostal==Cities.state_abb).filter(Cities.city==req['cityChoice'], States.name==req['state']).first()
+    city = session.query(Cities, States.stusps).join(States, States.stusps==Cities.stateabb).filter(Cities.cityname==req['cityChoice'], States.stusps==req['state']).first()
+    print (city)
     if city == None:
         return jsonify(tornadoes=city, areaOutline=None, center=None)
-    print (city[0].latitude, city[0].longitude)
+    print (city[0].lat, city[0].lon)
     statement = """SELECT row_to_json(fc)
         FROM (SELECT 'FeatureCollection' AS type, array_to_json(array_agg(f)) AS features
         FROM (SELECT 'Feature' AS type
@@ -61,14 +63,15 @@ def getCityData():
         , row_to_json((SELECT t FROM (SELECT mag, date) AS t
             )) AS properties
             FROM tornadoes AS tor
-            WHERE ST_Intersects(ST_Transform(tor.geom, 4326), ST_Buffer(CAST(ST_SetSRID(ST_MakePoint({},{}), 4326)AS geography), 16093.4))
-        ) AS f ) AS fc""".format(city[0].longitude, city[0].latitude)
+            WHERE ST_Intersects(ST_Transform(tor.geom, 4326), ST_Buffer(CAST(ST_SetSRID(ST_MakePoint({},{}), 4326)AS geography), {}))
+        ) AS f ) AS fc""".format(city[0].lon, city[0].lat,float(req['bufferSize']) * 1690.34 )
     tornadoes = session.execute(statement).fetchall()
     print (tornadoes)
-    bufferGeom = 'SELECT ST_AsGeoJSON(ST_Buffer(CAST(ST_SetSRID(ST_MakePoint({}, {}), 4326)AS geography), 16093.4)) AS geom, ST_AsGeoJSON(ST_AsText(ST_MakePoint({}, {}))) as center'.format(city[0].longitude, city[0].latitude, city[0].longitude, city[0].latitude)
+    print (statement)
+    bufferGeom = 'SELECT ST_AsGeoJSON(ST_Buffer(CAST(ST_SetSRID(ST_MakePoint({}, {}), 4326)AS geography), {})) AS geom, ST_AsGeoJSON(ST_AsText(ST_MakePoint({}, {}))) as center'.format(city[0].lon, city[0].lat, float(req['bufferSize']) * 1690.34 ,city[0].lon, city[0].lat)
     buffered = session.execute(bufferGeom).first()
     print (buffered)
-    coordinates = [city[0].longitude, city[0].latitude]
+    coordinates = [city[0].lon, city[0].lat]
     print (coordinates)
 
     return jsonify(tornadoes=[dict(row) for row in tornadoes], areaOutline=buffered.geom, center=buffered.center)
