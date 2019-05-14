@@ -40,7 +40,6 @@
 
     document.getElementById('clearing').addEventListener('click', function(){
         mymap.eachLayer(function (layer){
-            console.log(layer)
             if (layer.feature && layer.feature.type != undefined){
                 mymap.removeLayer(layer)
             }
@@ -77,8 +76,10 @@
             var state = item.options[item.value-1].text
             var request = new XMLHttpRequest()
             request.open('POST', '/getCityData', true)
-            var data = {'state':item.options[item.value-1].text, 'cityChoice':document.getElementById('cityChoice').value}
+            var data = {'state':item.options[item.value-1].text, 'cityChoice':document.getElementById('cityChoice').value, 
+                        "bufferSize":document.getElementById("bufferSize").value}
         }
+        console.log(data)
         var myJSON = JSON.stringify(data)
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
         request.send(myJSON)

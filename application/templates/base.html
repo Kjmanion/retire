@@ -45,9 +45,21 @@
          </form>
          <form action="" method='post'>
              <h3>{{form2.description}}</h3>
+<<<<<<< HEAD
              <h4>This query will return a record of tornadoes from 1950-2017 that come within 10 miles</h4>
              <input type="text" id='cityChoice'>
              {{form2.selections2(class_='form-control',placeholder="")}}
+=======
+             <h4>Select a city and state. Select the size of the buffer. What returns will be all tornado paths within that buffer.</h4>
+             <input type="text" id='cityChoice'>
+             {{form2.selections2(class_='form-control',placeholder="")}}
+             <select name="bufferSize" id="bufferSize">
+                <option value="5">5 miles</option>
+                <option value="10">10 miles</option>
+                <option value="15">15 miles</option>
+                <option value="20">20 miles</option>
+             </select>
+>>>>>>> macProV
              <input type="button" value="Submit" id='sendCityData'>
              <br>
          </form>
